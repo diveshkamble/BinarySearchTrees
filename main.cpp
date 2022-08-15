@@ -22,7 +22,6 @@ int main()
 	myTree.PrintInOrder();
 	cout << endl;
 
-	myTree.PrintChildren(myTree.ReturnRootKey());
-
+	cout << "The smallest value in the tree is " << myTree.FindSmallest() << "\n";
 	return 0;
 }
