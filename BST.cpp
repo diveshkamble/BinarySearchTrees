@@ -162,7 +162,7 @@ int BST::FindSmallestPrivate(node* Ptr)
     }
     else
     {   if (Ptr->left != NULL) {
-            return FindSmallestPrivate(Ptr - left);
+            return FindSmallestPrivate(Ptr -> left);
         }
         else
         {
@@ -175,8 +175,87 @@ int BST::FindSmallestPrivate(node* Ptr)
 
 
 
+void BST::RemoveNode(int key)
+{
+    RemoveNodePrivate(root, key);
+}
 
+void BST::RemoveNodePrivate(node* parent, int key)
+{
+    if (parent != NULL)
+    {
+        if (parent->key == key)
+        {
+            RemoveRootMatch();
+        }
+        else
+        {
 
+            if (key < parent->key && parent->left != NULL)
+            {
+                parent->left->key == key ? RemoveMatch(parent, parent->left, true) : RemoveNodePrivate(parent->left, key);
+            }
+            else if (key > parent->key && parent->right != NULL)
+            {
+                parent->right->key == key ? RemoveMatch(parent, parent->right, right) : RemoveNodePrivate(parent->right, key);
+            }
+            else {
+                cout << "The key ", << key << " was not found in the tree\n";
+            }
 
+        }
+    }
+    else
+    {
+        cout << "The tree is empty\n";
+    }
+}
 
+void BST::RemoveRootMatch()
+{
+    if (root != NULL)
+    {
+        node* delPtr = root;
+        int rootKey = root->key;
+        int smallestInRightSubtree;
 
+        //Case 1 - 0 children
+        if (root->left == NULL && root-> right == NULL)
+        {
+            root = NULL;
+            delete delPtr;
+        }
+
+        //Case 2 - 1 children
+        else if (root->left == NULL && root ->right != NULL)
+        {
+            root = root ->right;
+            delPtr -> right = NULL;
+            delete delPtr;
+            cout << "The root node with key " << rootKey << " was deketed." <<
+                 "The new root contains key " << root->key << endl;
+        }
+
+        else if (root->right == NULL && root ->left != NULL)
+        {
+            root = root ->left;
+            delPtr -> left = NULL;
+            delete delPtr;
+            cout << "The root node with key " << rootKey << " was deketed." <<
+                 "The new root contains key " << root->key << endl;
+        }
+        else {
+            smallestInRightSubtree = FindSmallestPrivate(root->right);
+
+            RemoveNodePrivate(root, smallestInRightSubtree);
+            root->key = smallestInRightSubtree;
+            cout << "The root key containing key " << rootKey << " was overwritten with key " << root->key << endl;
+        }
+
+    }
+    else
+    {
+        cout << "Can not remove root. The tree is empty.\n";
+
+    }
+}
